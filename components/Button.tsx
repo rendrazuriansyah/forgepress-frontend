@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import styles from './Button.module.css';
 
 interface ButtonProps {
   text: string;
@@ -17,15 +18,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      style={{
-        padding: '10px 20px',
-        backgroundColor: '#0070f3',
-        color: 'white',
-        border: 'none',
-        borderRadius: '5px',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        opacity: disabled ? 0.7 : 1,
-      }}
+      className={styles.button}
     >
       {text}
     </button>
