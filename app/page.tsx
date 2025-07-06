@@ -1,13 +1,17 @@
-'use client';
+// 'use client';
 
 // import Button from '@/components/Button';
 import Link from 'next/link';
 import PostCard from '@/components/PostCard';
+import { getPostData, getSortedPostsData } from '@/lib/posts';
+import MarkdownContent from '@/components/MarkdownContent';
 
 export default function HomePage() {
   // const handleClick = () => {
   //   alert('Tombol diklik!');
   // };
+  const allPosts = getSortedPostsData();
+  const firstPost = getPostData('my-first-post');
 
   return (
     <main className='min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4'>
@@ -51,6 +55,26 @@ export default function HomePage() {
           description='Post ini tidak memiliki gambar, tapi isinya tetap insightful!'
           slug='post-ketiga'
         ></PostCard>
+      </div>
+
+      <div className='w-full max-w-4xl bg-white rounded-lg shadow-md p-8 mt-8'>
+        <h2 className='text-3xl font-bold text-gray-800 mb-4'>
+          Preview Markdown Content:
+        </h2>
+        <MarkdownContent
+          htmlContent={firstPost.contentHtml}
+        ></MarkdownContent>
+      </div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full max-w-4xl'>
+        {allPosts.map(({ id, title, description, date }) => (
+          <PostCard
+            key={id}
+            title={title}
+            description={`${description} - ${date}`}
+            slug={id}
+          ></PostCard>
+        ))}
       </div>
     </main>
   );
