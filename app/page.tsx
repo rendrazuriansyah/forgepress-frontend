@@ -2,6 +2,7 @@
 
 // import Button from '@/components/Button';
 import Link from 'next/link';
+import PostCard from '@/components/PostCard';
 
 export default function HomePage() {
   // const handleClick = () => {
@@ -30,6 +31,26 @@ export default function HomePage() {
         >
           Ke Halaman Kontak
         </Link>
+      </div>
+
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 w-full max-w-4xl'>
+        <PostCard
+          title='Judul Post Pertama'
+          description='Ini adalah deskripsi singkat dari post pertama yang menarik.'
+          slug='post-pertama'
+          imageUrl='/images/dummy-post-image.jpg'
+        ></PostCard>
+        <PostCard
+          title='Judul Post Kedua'
+          description='Deskripsi lebih panjang tentang post kedua yang membahas topik penting.'
+          slug='post-kedua'
+          imageUrl='/images/dummy-post-image.jpg'
+        ></PostCard>
+        <PostCard
+          title='Post Ketiga Tanpa Gambar'
+          description='Post ini tidak memiliki gambar, tapi isinya tetap insightful!'
+          slug='post-ketiga'
+        ></PostCard>
       </div>
     </main>
   );
