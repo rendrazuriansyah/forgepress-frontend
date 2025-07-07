@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { MdShare } from 'react-icons/md';
+import { FaCheck } from 'react-icons/fa';
 
 interface ShareLinkButtonProps {
   link: string;
@@ -29,13 +31,13 @@ const ShareLinkButton: React.FC<ShareLinkButtonProps> = ({ link }) => {
       {/* ini bisa diganti icon share atau copy */}
       {copied ? (
         <>
+          <FaCheck className='h-5 w-5'>{/* icon check */}</FaCheck>
           <span>Tersalin!</span>
-          {/* <CheckIcon className="h-5 w-5"></CheckIcon> contoh icon */}
         </>
       ) : (
         <>
+          <MdShare className='h-5 w-5'>{/* icon share */}</MdShare>
           <span>Salin Link</span>
-          {/* <LinkIcon className="h-5 w-5"></LinkIcon> contoh icon */}
         </>
       )}
     </button>
