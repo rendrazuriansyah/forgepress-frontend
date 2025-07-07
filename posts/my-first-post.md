@@ -1,6 +1,6 @@
 ---
 title: Post Pertama Saya Dengan Markdown
-date: '2025-06-06'
+date: '2025-07-06'
 author: Rendra
 description: Belajar membaca file markdown di Next.js.
 ---
