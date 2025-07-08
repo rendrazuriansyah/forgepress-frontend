@@ -8,7 +8,7 @@ import rehypeHighlight from 'rehype-highlight'; // code highlighting
 
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-export function getPostData(id: string) {
+export async function getPostData(id: string) {
   const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 

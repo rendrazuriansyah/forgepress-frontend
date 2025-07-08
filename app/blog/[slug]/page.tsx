@@ -3,13 +3,16 @@ import MarkdownContent from '@/components/MarkdownContent';
 import ShareLinkButton from '@/components/ShareLinkButton';
 import type { Metadata } from 'next';
 
+interface BlogPostPageProps {
+  params: Promise<{ slug: string }>;
+}
+
 // fungsi untuk generate metadata dinamis
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const postData = getPostData(params.slug);
+}: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const postData = await getPostData(slug);
   return {
     title: postData.title,
     description: postData.description,
@@ -17,7 +20,7 @@ export async function generateMetadata({
       title: postData.title,
       description: postData.description,
       // url: `http://nextjs-headless-cms-manual.vercel.app/blog/${params.slog}`,
-      url: `http://localhost:3000/blog/${params.slug}`,
+      url: `http://localhost:3000/blog/${slug}`,
       type: 'article',
       publishedTime: postData.date,
       authors: [postData.author],
@@ -33,10 +36,11 @@ export async function generateStaticParams() {
 }
 
 // komponen halaman detail post
-export default function Post({ params }: { params: { slug: string } }) {
-  const postData = getPostData(params.slug); // mengambil data post berdasarkan slug (id)
-  // const currentPostLink = `http://nextjs-headless-cms-manual.vercel.app/blog/${params.slug}`;
-  const currentPostLink = `http://localhost:3000/blog/${params.slug}`;
+export default async function Post({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+  const postData = await getPostData(slug); // mengambil data post berdasarkan slug (id)
+  // const currentPostLink = `http://nextjs-headless-cms-manual.vercel.app/blog/${slug}`;
+  const currentPostLink = `http://localhost:3000/blog/${slug}`;
 
   return (
     <main className='container mx-auto px-4 py-8 max-w-2xl'>
