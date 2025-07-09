@@ -2,13 +2,17 @@
 const nextConfig = {
   images: {
     remotePatterns: [
+      // {
+      //   protocol: 'https',
+      //   hostname: 'res.cloudinary.com',
+      // },
+      // {
+      //   protocol: 'https',
+      //   hostname: 'nextjs-headless-cms-manual.vercel.app',
+      // },
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'nextjs-headless-cms-manual.vercel.app',
+        protocol: 'http',
+        hostname: 'localhost',
       },
     ],
   },
