@@ -11,7 +11,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 interface BlogPostPageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 // fungsi untuk generate metadata dinamis (dari Strapi)
