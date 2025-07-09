@@ -1,3 +1,8 @@
+import { remark } from 'remark'; // core remark
+import html from 'remark-html'; // untuk markdown ke html
+import gfm from 'remark-gfm'; // github flavored markdown
+import rehypeHighlight from 'rehype-highlight'; // code highlighting
+
 // --- Strapi v5 ---
 
 // Mengisolasi struktur format gambar agar lebih rapi dan reusable.
@@ -88,6 +93,17 @@ interface StrapiResponse<T> {
 const STRAPI_API_URL =
   process.env.STRAPI_API_URL || 'http://localhost:1337';
 
+export async function markdownToHtml(
+  markdownContent: string,
+): Promise<string> {
+  const processedContent = await remark()
+    .use(html, { sanitize: false })
+    .use(gfm)
+    .use(rehypeHighlight)
+    .process(markdownContent);
+  return processedContent.toString();
+}
+
 export async function getStrapiPosts(): Promise<PostAttributes[]> {
   // Return type berubah, langsung `PostAttributes[]`
   const res = await fetch(
@@ -126,7 +142,8 @@ export async function getStrapiPostBySlug(
   const data: StrapiResponse<PostAttributes> = await res.json();
 
   if (data.data && data.data.length > 0) {
-    return data.data[0]; // Langsung kembalikan item pertama, tidak perlu .attributes lagi.
+    data.data[0].content = await markdownToHtml(data.data[0].content); // proses content jadi html
+    return data.data[0]; // Langsung ke item pertama, tidak perlu .attributes lagi.
   }
   return null;
 }
