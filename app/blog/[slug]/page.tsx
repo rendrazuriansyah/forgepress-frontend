@@ -10,14 +10,16 @@ import Link from 'next/link';
 
 import type { Metadata } from 'next';
 
-interface BlogPostPageProps {
-  params: { slug: string };
-}
+// interface BlogPostPageProps {
+//   params: Promise<{ slug: string }>;
+// }
 
 // fungsi untuk generate metadata dinamis (dari Strapi)
 export async function generateMetadata({
   params,
-}: BlogPostPageProps): Promise<Metadata> {
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const postData = await getStrapiPostBySlug(slug);
   if (!postData) {
@@ -66,7 +68,7 @@ export async function generateStaticParams() {
 export default async function Post({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
   const postData = await getStrapiPostBySlug(slug); // mengambil data post berdasarkan slug (id)
