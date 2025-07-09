@@ -7,6 +7,7 @@ import MarkdownContent from '@/components/MarkdownContent';
 import ShareLinkButton from '@/components/ShareLinkButton';
 import Image from 'next/image';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import type { Metadata } from 'next';
 
@@ -23,10 +24,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const postData = await getStrapiPostBySlug(slug);
   if (!postData) {
-    return {
-      title: 'Post Nof Found',
-      description: 'The post you are looking for does not exist.',
-    };
+    notFound();
+    // return {
+    // title: 'Post Not Found',
+    // description: 'The post you are looking for does not exist.',
+    // };
   }
   return {
     title: postData.title,
