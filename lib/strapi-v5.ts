@@ -51,6 +51,13 @@ interface StrapiImageData {
   publishedAt: string;
 }
 
+export interface CategoryAttributes {
+  name: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface PostAttributes {
   id: number; // 'id' dan 'documentId' untuk Post juga langsung ada di sini di v5.
   documentId: string;
@@ -63,6 +70,7 @@ export interface PostAttributes {
   // Perubahan paling signifikan: 'coverImage' tidak lagi dibungkus oleh '{ data: ... }'.
   // Langsung me-refer ke StrapiImageData atau null.
   coverImage: StrapiImageData | null;
+  categories: StrapiResponseDataItem<CategoryAttributes>[];
   createdAt: string;
   updatedAt: string;
 }
@@ -88,6 +96,20 @@ interface StrapiResponse<T> {
       total: number;
     };
   };
+}
+
+interface StrapiSingleResponse<T> {
+  data: StrapiResponseDataItem<T> | null;
+  meta: Record<string, unknown>;
+}
+
+export interface AboutPageAttributes {
+  title: string;
+  content: string;
+  coverImage: StrapiImageData | null;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
 }
 
 const STRAPI_API_URL =
@@ -157,4 +179,56 @@ export async function getStrapiPostBySlug(
     return data.data[0]; // Langsung ke item pertama, tidak perlu .attributes lagi.
   }
   return null;
+}
+
+// mengambil semua kategori
+export async function getStrapiCategories(): Promise<
+  StrapiResponseDataItem<CategoryAttributes>[]
+> {
+  const res = await fetch(`${STRAPI_API_URL}/api/categories`);
+  if (!res.ok) {
+    console.error(
+      'Failed to fetch categories from Strapi:',
+      res.status,
+      res.statusText,
+    );
+    throw new Error('Failed to fecth categories');
+  }
+  const data: StrapiResponse<CategoryAttributes> = await res.json();
+  return data.data;
+}
+
+// mengambil post berdasarkan slug kategori
+export async function getStrapiPostsByCategorySlug(
+  categorySlug: string,
+): Promise<StrapiResponseDataItem<PostAttributes>[]> {
+  const res = await fetch(
+    `${STRAPI_API_URL}/api/posts?filters[categories][slug][$eq]=${categorySlug}&populate=coverImage&populate=categories`,
+  );
+  if (!res.ok) {
+    console.error(
+      `Failed to fetch posts for category ${categorySlug} from Strapi:`,
+      res.status,
+      res.statusText,
+    );
+    throw new Error('Failed to fetch posts by category');
+  }
+  const data: StrapiResponse<PostAttributes> = await res.json();
+  return data.data;
+}
+
+export async function getStrapiAboutPage(): Promise<StrapiResponseDataItem<AboutPageAttributes> | null> {
+  const res = await fetch(
+    `${STRAPI_API_URL}/api/about-page?populate=coverImage`,
+  );
+  if (!res.ok) {
+    console.error(
+      'Failed to fetch About Page from Strapi:',
+      res.status,
+      res.statusText,
+    );
+    return null;
+  }
+  const data: StrapiSingleResponse<AboutPageAttributes> = await res.json();
+  return data.data;
 }
