@@ -108,6 +108,12 @@ export async function getStrapiPosts(): Promise<PostAttributes[]> {
   // Return type berubah, langsung `PostAttributes[]`
   const res = await fetch(
     `${STRAPI_API_URL}/api/posts?populate=coverImage`,
+    {
+      next: {
+        // revalidate: 60, // time based revalidation (ISR)
+        tags: ['posts'], // on demand revalidation
+      },
+    },
   );
   if (!res.ok) {
     console.error(
@@ -129,6 +135,11 @@ export async function getStrapiPostBySlug(
   // Return type juga berubah, langsung `PostAttributes`
   const res = await fetch(
     `${STRAPI_API_URL}/api/posts?filters[slug][$eq]=${slug}&populate=coverImage`,
+    {
+      next: {
+        tags: ['posts', `post-${slug}`],
+      },
+    },
   );
   if (!res.ok) {
     console.error(
